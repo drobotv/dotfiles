@@ -50,6 +50,7 @@ in
     opencode
     zed-editor-fhs
     nixfmt
+    vesktop
     # rofi
   ];
 }
