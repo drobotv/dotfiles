@@ -8,6 +8,18 @@ let
   configs = {
     # rofi = "rofi";
   };
+
+  insiders = (pkgs.vscode.override { isInsiders = true; }).overrideAttrs (oldAttrs: rec {
+    src = (
+      builtins.fetchTarball {
+        url = "https://code.visualstudio.com/sha/download?build=insider&os=linux-x64";
+        sha256 = "0gy2241rp76j42f1c2pn6qjp3f1v1yrgdrmg612njmpjfada1mqp";
+      }
+    );
+    version = "latest";
+
+    buildInputs = oldAttrs.buildInputs ++ [ pkgs.krb5 ];
+  });
 in
 
 {
@@ -43,14 +55,18 @@ in
     recursive = true;
   }) configs;
 
-  home.packages = with pkgs; [
-    bun
-    nodejs
-    gcc
-    opencode
-    zed-editor-fhs
-    nixfmt
-    vesktop
-    # rofi
-  ];
+  home.packages =
+    with pkgs;
+    [
+      bun
+      nodejs
+      gcc
+      opencode
+      zed-editor-fhs
+      nil
+      nixfmt
+      vesktop
+      # rofi
+    ]
+    ++ [ insiders.fhs ];
 }
